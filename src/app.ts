@@ -365,6 +365,8 @@ const commands: Command[] = [
           if(ind != -1){
             skip = Math.max(0, ind - 5);
           }
+        }else{
+          skip = 0;
         }
       }
 
