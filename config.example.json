@@ -1,0 +1,24 @@
+{
+	"token": "bot token",
+	"clientId": "application id",
+	"development": false,
+	"admins": ["163435237924143104"],
+	"guild": "968549889548124291",
+	"leaderboards": {
+		"summer_2025": {
+			"start": 1746766800,
+			"end": 1756098000,
+			"membership": "closed",
+			"bounties": ["4A","mountaincraft"]
+		},
+		"all": {
+			"start": 0,
+			"end": 2147483647,
+			"membership": "open",
+			"bounties": []
+		}
+	},
+	"aliases": {
+		"summer": "summer_2025"
+	}
+}
