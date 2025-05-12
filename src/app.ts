@@ -364,6 +364,8 @@ const commands: Command[] = [
           const ind = entries.findIndex(entry => entry.id == id);
           if(ind != -1){
             skip = Math.max(0, ind - 5);
+          }else{
+            skip = 0;
           }
         }else{
           skip = 0;
