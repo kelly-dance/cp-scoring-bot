@@ -48,7 +48,7 @@ type UserData = {
   contests: CodeforcesContest[]
 };
 
-let userData = new Map<string, UserData>;
+const userData = new Map<string, UserData>;
 
 const BACKEND_URL = "https://byu-cpc-backend-433866642768.us-west1.run.app";
 const updateUserData = async () => {
@@ -235,7 +235,7 @@ const commands: Command[] = [
       }
 
       const user = interaction.options.getUser('target', true);
-      let leaderboard = resolveLeaderboard(interaction.options.getString('leaderboard', true));
+      const leaderboard = resolveLeaderboard(interaction.options.getString('leaderboard', true));
 
       db[user.id].leaderboards = [...new Set([leaderboard, ...db[user.id].leaderboards])]
 
@@ -264,7 +264,7 @@ const commands: Command[] = [
       }
 
       const user = interaction.options.getUser('target', true);
-      let leaderboard = resolveLeaderboard(interaction.options.getString('leaderboard', true))
+      const leaderboard = resolveLeaderboard(interaction.options.getString('leaderboard', true))
 
       db[user.id].leaderboards = db[user.id].leaderboards.filter(x => x != leaderboard);
 
@@ -286,16 +286,16 @@ const commands: Command[] = [
         return;
       }
 
-      let query = interaction.options.getString('query', true).toLowerCase();
+      const query = interaction.options.getString('query', true).toLowerCase();
 
       const candidates: UserData[] = [];
       for(const user of userData.values()){
-        if([user.display_name, user.kattis_username ?? '', user.codeforces_username ?? ''].some(s => s.includes(query))){
+        if([user.display_name, user.kattis_username ?? '', user.codeforces_username ?? ''].some(s => s.toLowerCase().includes(query))){
           candidates.push(user);
         }
       }
 
-      let lines = [];
+      const lines = [];
 
       if(candidates.length === 0){
         lines.push("No results found");
@@ -331,7 +331,7 @@ const commands: Command[] = [
       // hopefully this never becomes needed
       // await interaction.deferReply();
 
-      let leaderboard = resolveLeaderboard(interaction.options.getString('leaderboard', true));
+      const leaderboard = resolveLeaderboard(interaction.options.getString('leaderboard', true));
       const page = interaction.options.getNumber('page', false) ?? 0;
 
       const lbinfo = config.leaderboards[leaderboard];
