@@ -77,7 +77,7 @@ const updateUserData = async () => {
     userData.set(user.id, user);
   }
 };
-setInterval(updateUserData, 600e3);
+setInterval(updateUserData, 60e3 * 30);
 
 type Problem = {
   name: string,
@@ -107,7 +107,7 @@ const updateProblemData = async () => {
     });
   }
 }
-setInterval(updateProblemData, 600e3);
+setInterval(updateProblemData, 60e3 * 30);
 
 type DbEntry = {
   id?: string,
