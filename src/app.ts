@@ -1,7 +1,7 @@
 import { ChatInputCommandInteraction, Client, Events, GatewayIntentBits, Interaction, InteractionContextType, MessageFlags, REST, Routes, SharedSlashCommand, SlashCommandBuilder, SlashCommandOptionsOnlyBuilder } from "discord.js";
 import fetch from "node-fetch";
 import fs from "node:fs";
-import { exit } from "node:process";
+
 const config: {
   token: string,
   clientId: string,
@@ -31,11 +31,6 @@ type CodeforcesSubmission = Submission & {
   type: 'virtual' | 'contestant' | 'practice',
 };
 
-type CodeforcesContest = {
-  contest_id: string,
-  time: number,
-};
-
 type UserData = {
   display_name: string,
   kattis_username?: string,
@@ -45,7 +40,6 @@ type UserData = {
   id: string,
   codeforces_submissions:  CodeforcesSubmission[],
   kattis_submissions:  Submission[],
-  contests: CodeforcesContest[]
 };
 
 const userData = new Map<string, UserData>;
@@ -64,7 +58,6 @@ const updateUserData = async () => {
       last_checked: item.last_checked,
       kattis_submissions: [],
       codeforces_submissions: [],
-      contests: [],
     };
     if(item.codeforces_submissions != null) {
       user.codeforces_submissions = Object.entries(item.codeforces_submissions)
@@ -143,6 +136,7 @@ const calcUserScore = (userid: string, start: number, end: number, bounties: Set
   if(!userData.has(userid)) return 0;
   const user = userData.get(userid)!;
   let score = 0;
+  const contests = new Set<string>();
   for(const problem of user.kattis_submissions){
     if(problem.time < start || problem.time > end) continue;
     const probleminfo = problemData.get(problem.problem_id);
@@ -154,14 +148,14 @@ const calcUserScore = (userid: string, start: number, end: number, bounties: Set
     if(problem.time < start || problem.time > end) continue;
     const probleminfo = problemData.get(problem.problem_id);
     let value = (((probleminfo?.rating || 800)/25-17)/10) ** exponent;
-    if(problem.type == 'contestant') value *= 2;
     if(bounties.has(problem.problem_id)) value *= 2;
+    if(problem.type == 'contestant') {
+      value *= 2;
+      contests.add(problem.type.substring(0, problem.type.length-1));
+    }
     score += value;
   }
-  for(const contest of user.contests){
-    if(contest.time < start || contest.time > end) continue;
-    score += 100;
-  }
+  score += 10 * contests.size;
   return score;
 };
 
